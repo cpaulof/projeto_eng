@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import User
+from .models import User, Navio, Solicitacao, Berco, Atracacao, RegistroSaida
 
 
 class UserAdmin(BaseUserAdmin):
@@ -32,5 +32,23 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions',)
 
-
 admin.site.register(User, UserAdmin)
+
+@admin.register(Navio)
+class NavioAdmin(admin.ModelAdmin):
+    pass
+@admin.register(Solicitacao)
+class SolicitacaoAdmin(admin.ModelAdmin):
+    pass
+@admin.register(Berco)
+class BercoAdmin(admin.ModelAdmin):
+    pass
+@admin.register(RegistroSaida)
+class RegistroSaidaAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Atracacao)
+class AtracacaoAdmin(admin.ModelAdmin):
+    fields = ('solicitacao', 'berco', ('data_entrada', 'data_saida'))
+

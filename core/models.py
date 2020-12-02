@@ -64,5 +64,38 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.TIPOS[self.user_type]
 
 
+class Navio(models.Model):
+    nome = models.CharField(unique=True, max_length=150)
+    #proprietario = 
+    def __str__(self):
+        return self.nome
+
+
+class Solicitacao(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    navio = models.ForeignKey(Navio, on_delete=models.CASCADE)
+    data = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.data)
+
+class Berco(models.Model):
+    nome = models.CharField(unique=True, max_length=50)
+    ocupado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.nome
+
+class Atracacao(models.Model):
+    solicitacao = models.OneToOneField(Solicitacao, on_delete=models.CASCADE)
+    data_entrada = models.DateTimeField()
+    berco = models.ForeignKey(Berco, on_delete=models.CASCADE)
+    data_saida = models.DateTimeField()
+
+class RegistroSaida(models.Model):
+    atracacao = models.OneToOneField(Atracacao, on_delete=models.CASCADE)
+    data = models.DateTimeField(auto_now_add=True)
+
+
 
 
