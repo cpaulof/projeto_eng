@@ -27,12 +27,16 @@ file.close()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.0.0.107']
 
 
 # Application definition
 
 AUTH_USER_MODEL = 'core.User'
+
+BOOTSTRAP3 = {
+    'include_jquery': True,
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -41,6 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'jquery',
+    'bootstrap_datepicker_plus',
+    "bootstrap3",
     'core'
 ]
 

@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', views.login_view, name='login'),
     path('insercao/', views.insercao, name='insercao'),
-    path('editar/', views.editar, name='editar'),
-    path('visualizar/', views.visualizar, name='visualizar')
+    path('editar/<int:atrid>', views.editar, name='editar'),
+    path('visualizar/', views.visualizar, name='visualizar'),
+    path('logout/', views.logout_view, name='logout')
 ]

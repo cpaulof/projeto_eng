@@ -1,4 +1,6 @@
-from django.shortcuts import render, redirect
+import datetime
+
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse_lazy
@@ -6,7 +8,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic.edit import FormView
 from django.contrib import messages
 
-from .forms import LoginForm
+from .forms import LoginForm, AtracacaoForm, ToDoForm, ToDoForm2, AtracacaoForm2
+from .models import Atracacao
 
 # Create your views here.
 
@@ -39,14 +42,36 @@ def login_view(request):
         return render(request, "core/login.html", {'form': form})
 
 def insercao(request):
-    return HttpResponse("insercao")
+    obj = get_object_or_404(Atracacao, solicitacao__usuario=request.user, pk=1)
+    form = AtracacaoForm(instance=obj)
 
-def editar(request):
-    return HttpResponse("editar_insercao")
+    #form = ToDoForm()
+
+    return render(request, "core/test.html", {'form': form})
+
+def editar(request, atrid):
+    obj = get_object_or_404(Atracacao, solicitacao__usuario=request.user, pk=atrid)
+    form = AtracacaoForm(instance=obj)
+    #form = AtracacaoForm2()
+
+    return render(request, "core/editar.html", {'form': form})
 
 def visualizar(request):
-    logout(request)
-    return HttpResponse("visualizacao")
+    objs = Atracacao.objects.filter(status=0)
+    
+    context = {'objs':objs}
+    if request.user.is_authenticated:
+        context['nome_usuario'] = request.user.name
+        context['logado'] = True
+    return render(request, "core/visualizar.html", context)
+
+
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+        messages.success(request, 'Deslogado')
+    
+    return HttpResponseRedirect(reverse_lazy('index'))
 
     
 

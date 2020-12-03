@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Programação{% endblock %}
+{% block content %}
+
+{% if messages %}
+    {% for m in messages %}
+        <p>-> {{ m }}</p>
+    {% endfor %}
+{% endif %}
+{% if not request.user.is_authenticated %}
+    VISITANTE
+
+    <p><a href="{% url 'login' %}">Fazer login</a></p>
+{% else %}
+    Bem vindo: {{ request.user.name }}
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+{% endif %}
+
+<br/>
+{% if objs %}
+<table>
+    <caption>Programação</caption>
+    <tr>
+        <td >Num</td>
+        <td>Navio</td>
+        <td>Solicitante</td>
+        <td>Data Entrada</td>
+        <td>Data Saida</td>
+        <td>Berço</td>
+    </tr>
+    <tr>
+        {% for obj in objs %}
+        <td>
+            {% if obj.solicitacao.usuario == request.user %}
+            <a href="{% url 'editar' atrid=obj.pk %}">{{ forloop.counter }}</a>
+            {% else %}
+            {{ forloop.counter }}
+            {% endif %}
+        </td>
+        <td>{{ obj.solicitacao.navio }}</td>
+        <td>{{ obj.solicitacao.usuario.name }}</td>
+        <td>{{ obj.data_entrada }}</td>
+        <td>{{ obj.data_saida }}</td>
+        <td>{{ obj.berco }}</td>
+        {% endfor %}
+    </tr>
+</table>
+
+{% endif %}
+
+{% endblock %}

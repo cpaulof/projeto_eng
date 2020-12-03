@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Programação{% endblock %}
+{% block extra_head %}
+    {{ form.media }}
+{% endblock %}
+{% block content %}
+{% if messages %}
+    {% for m in messages %}
+        <p>-> {{ m }}</p>
+    {% endfor %}
+{% endif %}
+{% if not request.user.is_authenticated %}
+    VISITANTE
+
+    <p><a href="{% url 'login' %}">Fazer login</a></p>
+{% else %}
+    Bem vindo: {{ request.user.name }}
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+{% endif %}
+
+<form method="post" role="form">
+    {% for field in form.visible_fields %}
+    <div id="div_{{ field.html_name }}"
+         class="form-group{% if field.errors %} has-error{% endif %}">
+        {{ field.label_tag }}
+        {{ field }}
+        <div class="text-muted pull-right">
+            <small>{{ field.help_text }}</small>
+        </div>
+        <div class="help-block">
+            {{ field.errors }}
+        </div>
+    </div>
+    {% endfor %}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+</form>
+
+{% endblock %}

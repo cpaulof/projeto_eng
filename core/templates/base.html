@@ -1,5 +1,20 @@
-<head><title>{% block title %}Base {% endblock %}</title></head>
-<h1>BASE</h1>
-
-
-{% block content %} {% endblock %}
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>{% block title %}Base{% endblock %}</title>
+        {% bootstrap_css %}
+        {% bootstrap_javascript jquery='full' %}
+        
+        {% block extra_head %} {% endblock %}
+      
+     <style>
+       caption, table, td {
+         border:2px black solid;
+       }
+     </style>   
+    </head>
+    <body>
+      {% block content %} {% endblock %}
+    </body>
+</html>

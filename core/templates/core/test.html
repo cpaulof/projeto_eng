@@ -1,0 +1,38 @@
+{% load bootstrap3 %}
+
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        {% bootstrap_css %}
+        {% bootstrap_javascript jquery='full' %}
+        
+        {{ form.media }}
+    </head>
+    <body>
+        <form method="post" role="form">
+            {% for field in form.visible_fields %}
+            <div id="div_{{ field.html_name }}"
+                 class="form-group{% if field.errors %} has-error{% endif %}">
+                {{ field.label_tag }}
+                {{ field }}
+                <div class="text-muted pull-right">
+                    <small>{{ field.help_text }}</small>
+                </div>
+                <div class="help-block">
+                    {{ field.errors }}
+                </div>
+            </div>
+            {% endfor %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </body>
+</html>

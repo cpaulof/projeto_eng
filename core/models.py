@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
      }
 
     email = models.EmailField(max_length=254, unique=True)
-    name = models.CharField(max_length=254, null=True, blank=True)
+    name = models.CharField(max_length=254)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -75,6 +75,7 @@ class Solicitacao(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     navio = models.ForeignKey(Navio, on_delete=models.CASCADE)
     data = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.data)
@@ -91,6 +92,7 @@ class Atracacao(models.Model):
     data_entrada = models.DateTimeField()
     berco = models.ForeignKey(Berco, on_delete=models.CASCADE)
     data_saida = models.DateTimeField()
+    status = models.IntegerField(default=0)
 
 class RegistroSaida(models.Model):
     atracacao = models.OneToOneField(Atracacao, on_delete=models.CASCADE)
