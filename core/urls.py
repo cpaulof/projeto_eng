@@ -8,5 +8,7 @@ urlpatterns = [
     path('insercao/', views.insercao, name='insercao'),
     path('editar/<int:atrid>', views.editar, name='editar'),
     path('visualizar/', views.visualizar, name='visualizar'),
-    path('logout/', views.logout_view, name='logout')
+    path('logout/', views.logout_view, name='logout'),
+    path('solicitacoes/', views.solicitacoes, name='solicitacoes'),
+    path('solicitacao/<int:pk>', views.solicitacao, name='solicitacao'),
 ]

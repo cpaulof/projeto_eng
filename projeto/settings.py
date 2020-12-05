@@ -27,7 +27,7 @@ file.close()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.0.0.107']
+ALLOWED_HOSTS = []
 
 
 # Application definition

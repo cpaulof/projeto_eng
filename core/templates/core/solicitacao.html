@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Programação{% endblock %}
+{% block content %}
+
+{% if messages %}
+    {% for m in messages %}
+        <p>-> {{ m }}</p>
+    {% endfor %}
+{% endif %}
+{% if not request.user.is_authenticated %}
+    VISITANTE
+
+    <p><a href="{% url 'login' %}">Fazer login</a></p>
+{% else %}
+    Bem vindo: {{ request.user.name }} - {{ request.user.get_type }}
+    <p><a href="{% url 'logout' %}">Sair</a></p>
+    
+    
+{% endif %}
+
+{% if request.user.user_type == 3 %}
+<p><a href="{% url 'insercao' %}">Solicitações</a></p>
+{% endif %}
+<p><a href="{% url 'insercao' %}">Criar Solicitação</a></p>
+
+
+asdasd
+
+
+
+
+
+{% endblock %}

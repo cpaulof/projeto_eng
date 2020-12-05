@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block extra_style %}
+.topnav {
+  background-color: #444;
+  overflow: hidden;
+}
+
+.topnav a, span {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: #555;
+}
+
+.topnav a.active {
+  background-color: #777;
+  color: white;
+}
+
+.topnav .a_logout{
+  float:right;
+}
+.topnav a.a_logout{
+  color:#f91220;
+}
+.topnav span{
+  border-right: 1px solid #777;
+}
+.list-title{
+  text-align:center;
+}
+{% endblock %}
+
+{% block navigation %}
+
+<div class="topnav">
+  <a {% if request.resolver_match.view_name == 'visualizar' %}class="active"{% endif %} href="{% url 'visualizar' %}">Programação</a>
+  <a {% if request.resolver_match.view_name == 'insercao' %}class="active"{% endif %}href="{% url 'insercao' %}">Criar Solicitação</a>
+  {% if request.user.user_type == 3 %}
+  <a {% if request.resolver_match.view_name == 'solicitacoes' %}class="active"{% endif %}href="{% url 'solicitacoes' %}">Solicitações</a>
+  {% endif %}
+  
+  <a class="a_logout" href="{% url 'logout' %}">Sair</a>
+  <span  class="a_logout" >{{request.user.name}} - {{request.user.get_type}}</span>
+</div>
+
+{% endblock %}

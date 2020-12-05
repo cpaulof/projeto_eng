@@ -9,12 +9,20 @@
         {% block extra_head %} {% endblock %}
       
      <style>
-       caption, table, td {
-         border:2px black solid;
-       }
+       {% block extra_style %}{% endblock %}
      </style>   
     </head>
     <body>
+      {% block navigation %}{% endblock %}
+      <div class="container">
+        {% if messages %}
+    {% for m in messages %}
+    <div class="alert alert-info" role="alert">
+        {{m}}
+        </div>
+    {% endfor %}
+    {% endif %}
       {% block content %} {% endblock %}
+    </div>
     </body>
 </html>

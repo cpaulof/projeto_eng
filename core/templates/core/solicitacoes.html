@@ -1,0 +1,42 @@
+{% extends base_template %}
+{% block title %}Programação{% endblock %}
+{% block content %}
+
+<table class="table table-bordered table-hover">
+    <caption>Solicitacoes em Aberto</caption>
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Navio</th>
+        <th scope="col">Berço</th>
+        <th scope="col">Data</th>
+        <th scope="col">Solicitante</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for s in solicitacoes %}
+      <tr class="view-solicitacao  " data-href="{% url 'solicitacao' pk=s.pk %}">
+        <th scope="row">{{forloop.counter}}</th>
+        <td>{{s.navio}}</td>
+        <td>{{s.berco}}</td>
+        <td>{{s.data}}</td>
+        <td>{{s.usuario}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    $(document).ready(function($) {
+    $(".view-solicitacao").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+    </script>
+
+{% endblock %}

@@ -70,22 +70,25 @@ class Navio(models.Model):
     def __str__(self):
         return self.nome
 
-
-class Solicitacao(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    navio = models.ForeignKey(Navio, on_delete=models.CASCADE)
-    data = models.DateTimeField(auto_now_add=True)
-    status = models.IntegerField(default=0)
-
-    def __str__(self):
-        return str(self.data)
-
+        
 class Berco(models.Model):
     nome = models.CharField(unique=True, max_length=50)
     ocupado = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nome
+
+class Solicitacao(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    navio = models.ForeignKey(Navio, on_delete=models.CASCADE)
+    data = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(default=0)
+    berco = models.ForeignKey(Berco, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.data)
+
+
 
 class Atracacao(models.Model):
     solicitacao = models.OneToOneField(Solicitacao, on_delete=models.CASCADE)

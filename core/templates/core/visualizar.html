@@ -1,51 +1,40 @@
-{% extends "base.html" %}
+{% extends base_template %}
 {% block title %}Programação{% endblock %}
 {% block content %}
+<div class="list-title">
+    <h2>Programação</h2>
+</div>
+{% for b in solicitacoes %}
 
-{% if messages %}
-    {% for m in messages %}
-        <p>-> {{ m }}</p>
-    {% endfor %}
-{% endif %}
-{% if not request.user.is_authenticated %}
-    VISITANTE
-
-    <p><a href="{% url 'login' %}">Fazer login</a></p>
-{% else %}
-    Bem vindo: {{ request.user.name }}
-    <p><a href="{% url 'logout' %}">Logout</a></p>
-{% endif %}
-
-<br/>
-{% if objs %}
-<table>
-    <caption>Programação</caption>
-    <tr>
-        <td >Num</td>
-        <td>Navio</td>
-        <td>Solicitante</td>
-        <td>Data Entrada</td>
-        <td>Data Saida</td>
-        <td>Berço</td>
-    </tr>
-    <tr>
-        {% for obj in objs %}
-        <td>
-            {% if obj.solicitacao.usuario == request.user %}
-            <a href="{% url 'editar' atrid=obj.pk %}">{{ forloop.counter }}</a>
-            {% else %}
-            {{ forloop.counter }}
+    <table class="table table-light table-bordered" >
+        <caption>Berco {{forloop.counter}}</caption>
+        <tr>
+            <td>Num</td>
+            <td>Navio</td>
+            <td>Data</td>
+            <td>Solicitante</td>
+        </tr>
+    {% for s in b %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{s.navio}}</td>
+            <td>
+            {% if s.usuario == request.user %}
+                <a data-toggle="tooltip"  title="Editar" href="{% url 'editar' atrid=s.pk %}">{{s.data}}</a>
+                {% else %} {{s.data}}
             {% endif %}
-        </td>
-        <td>{{ obj.solicitacao.navio }}</td>
-        <td>{{ obj.solicitacao.usuario.name }}</td>
-        <td>{{ obj.data_entrada }}</td>
-        <td>{{ obj.data_saida }}</td>
-        <td>{{ obj.berco }}</td>
-        {% endfor %}
-    </tr>
+            </td>
+            <td>{{s.usuario}}</td>
+            
+        </tr>
+        
+
+    {% endfor %}
 </table>
-
-{% endif %}
-
+{% endfor %}
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    </script>
 {% endblock %}
