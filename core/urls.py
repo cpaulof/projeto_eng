@@ -5,6 +5,7 @@ from core import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('login/', views.login_view, name='login'),
+    path("login/submit", views.submit_login),
     path('insercao/', views.insercao, name='insercao'),
     path('editar/<int:atrid>', views.editar, name='editar'),
     path('visualizar/', views.visualizar, name='visualizar'),
