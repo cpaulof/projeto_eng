@@ -12,4 +12,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('solicitacoes/', views.solicitacoes, name='solicitacoes'),
     path('solicitacao/<int:pk>', views.solicitacao, name='solicitacao'),
+    path('confirmar/<int:pk>', views.confirmar_solicitacao, name='confirmar'),
+    path('excluir/<int:pk>', views.excluir_solicitacao, name='excluir'),
 ]

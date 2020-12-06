@@ -33,14 +33,13 @@ def submit_login(request):
                 messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
                 return HttpResponseRedirect(reverse_lazy('visualizar'))
         else:
-            if request.user.is_authenticated:
-                messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
-                return HttpResponseRedirect(reverse_lazy('visualizar'))
-            form = LoginForm()
-        return render(request, "core/login.html", {'form': form})
+            messages.error(request, 'Dados incorretos!')
+        return render(request, "core/login.html", {})
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse_lazy('visualizar'))
     return render(request, 'core/login.html')
 #    if request.method == 'POST':
 #        form = LoginForm(request.POST)
@@ -65,6 +64,13 @@ def login_view(request):
 def insercao(request):
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
+
+    context = {}
+    if request.user.is_authenticated:
+        context['base_template'] = 'base_autenticado.html'
+    else:
+        context['base_template'] = 'base.html'
+    
     if request.method == "POST":
         navio = request.POST['navio']
         if not navio.replace(' ', '').isalnum():
@@ -83,16 +89,19 @@ def insercao(request):
     
 
 
-    return render(request, "core/insercao.html", {})
+    return render(request, "core/insercao.html", context)
 
 def editar(request, atrid):
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
-    obj = get_object_or_404(Atracacao, solicitacao__usuario=request.user, pk=atrid)
-    form = AtracacaoForm(instance=obj)
+    if request.user.user_type in (1, 3):
+        obj = get_object_or_404(Solicitacao, pk=atrid)
+    else:
+        obj = get_object_or_404(Solicitacao, usuario=request.user, pk=atrid)
+    #form = AtracacaoForm(instance=obj)
     #form = AtracacaoForm2()
 
-    return render(request, "core/editar.html", {'form': form})
+    return render(request, "core/editar.html", {'obj': obj})
 
 def visualizar(request):    
     context = {}
@@ -118,14 +127,14 @@ def logout_view(request):
     
 def solicitacoes(request):
     context = {}
-    if request.user.is_authenticated:
-        context['base_template'] = 'base_autenticado.html'
-    else:
-        context['base_template'] = 'base.html'
-
-    if not request.user.is_authenticated or request.user.user_type not in (1, 3):
+    context['base_template'] = 'base_autenticado.html'
+    
+    if not request.user.is_authenticated:
         return HttpResponseForbidden()
-    result = Solicitacao.objects.filter(status=0).order_by('data')
+    if request.user.user_type in (1, 3):
+        result = Solicitacao.objects.filter(status=0).order_by('data')
+    else:
+        result = Solicitacao.objects.filter(status=0, usuario=request.user).order_by('data')
     context['solicitacoes'] = result
     return render(request, "core/solicitacoes.html", context)
 
@@ -134,13 +143,25 @@ def solicitacao(request, pk=None):
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
     context = {}
-    obj = get_object_or_404(Solicitacao, pk=pk)
-    if obj.usuario == request.user:
-        context = {
-            'owner': True,
-        }
-    context['user_type'] = request.user.user_type
+    user_type = request.user.user_type
+    if request.user.is_authenticated:
+        context['base_template'] = 'base_autenticado.html'
+    else:
+        context['base_template'] = 'base.html'
+    if user_type in (1, 3):
+        obj = get_object_or_404(Solicitacao, pk=pk)
+    else:
+        obj = get_object_or_404(Solicitacao, pk=pk, usuario=request.user)
+
+    context['user_type'] = user_type
     context['obj'] = obj
 
     return render(request, "core/solicitacao.html", context)
+
+
+def confirmar_solicitacao(request, pk):
+    return HttpResponse("CONFIRMAR")
+
+def excluir_solicitacao(request, pk):
+    return HttpResponse("EXCLUIR")
 

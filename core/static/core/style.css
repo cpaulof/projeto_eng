@@ -1,0 +1,104 @@
+.topnav {
+    background-color: #444;
+    overflow: hidden;
+  }
+  
+  .topnav a, span {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  .topnav a:hover {
+    background-color: #ddd;
+    color: #555;
+  }
+  
+  .topnav a.active {
+    background-color: #777;
+    color: white;
+  }
+  
+  .topnav .a_logout{
+    float:right;
+  }
+  .topnav a.a_logout{
+    color:#f91220;
+  }
+  .topnav span{
+    border-right: 1px solid #777;
+  }
+  .list-title{
+    text-align:center;
+  }
+  .cblue{
+    background-color:blue;
+  
+  }
+  .form-container{
+    margin:auto;
+    width:50%;
+    margin-top:10%;
+    padding:10px;
+    overflow: hidden;
+    text-align:center;
+    
+    border: 1px solid #999;
+  }
+  .submit-right{
+    position:relative;
+    float:right;
+  }
+  .form-input-group select{
+    margin:auto;
+    width:50%;
+  }
+  .sol_title{
+    text-align: center;
+  }
+  .sol_row{
+    text-align: right;
+  }
+  .sol_detalhe{
+    border-bottom: 2px solid #AAA;
+    margin-top:15px;
+  }
+  .sol_action{
+    margin:2px;
+    margin-top:15px;
+    
+  }
+  .sol_label{
+    text-align: left;
+    border-right: 2px solid #AAA;
+    color: #129;
+    border-bottom: 2px solid #AAA;
+    margin-top:15px;
+  }
+  .solicitacao{
+    padding: 10%;
+  }
+  .div-select {
+        width:250px;  /* Tamanho final do select */
+        overflow:hidden; /* Esconde o conteúdo que passar do tamanho especificado */
+        background-color:green;
+      } 
+        
+  .div-select select {
+      background: url(http://www.webcis.com.br/images/imagens-noticias/select/ico-seta-select.gif) no-repeat #354880;/* Imagem de fundo (Seta) */
+      background-position: 205px center;  /*Posição da imagem do background*/
+      width: 270px; /* Tamanho do select, maior que o tamanho da div "div-select" */
+      height:48px; /* altura do select, importante para que tenha a mesma altura em todo os navegadores */
+      font-family:Arial, Helvetica, sans-serif; /* Fonte do Select */
+      font-size:18px; /* Tamanho da Fonte */
+      padding:13px 20px 13px 12px; /* Configurações de padding para posicionar o texto no campo */
+      color:#fff; /* Cor da Fonte */
+      text-indent: 0.01px; /* Remove seta padrão do FireFox */
+      text-overflow: "";  /* Remove seta padrão do FireFox */
+       /* Remove seta padrão do IE*/
+  }
+
+ 

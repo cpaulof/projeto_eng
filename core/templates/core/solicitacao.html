@@ -1,33 +1,51 @@
-{% extends "base.html" %}
+{% extends base_template %}
 {% block title %}Programação{% endblock %}
 {% block content %}
+<div class="solicitacao">
+    <div class="sol_title"><h2>Detalhe da Solicitação</h2></div>
+    <div class="row justify-content-start sol_row">
+        <div class="col-4 sol_label">
+        <h4>Feita por</h5>
+        </div>
+        <div class="col-4 sol_detalhe">
+        <h5>{{obj.usuario.name}}</h5>
+        </div>
+    </div>
+    <div class="row sol_row">
+        <div class="col-4 sol_label">
+        <h4>Data da Solicitação</h5>
+        </div>
+        <div class="col-4 sol_detalhe">
+        <h5>{{obj.data}}</h5>
+        </div>
+    </div>
+    <div class="row justify-content-start sol_row">
+        <div class="col-4 sol_label">
+        <h4>Navio</h5>
+        </div>
+        <div class="col-4 sol_detalhe">
+        <h5>{{obj.navio}}</h5>
+        </div>
+    </div>
+    <div class="row justify-content-start sol_row">
+        <div class="col-4 sol_label">
+        <h4>Berco</h5>
+        </div>
+        <div class="col-4 sol_detalhe">
+        <h5>{{obj.berco}}</h5>
+        </div>
+    </div>
+      <div class="row justify-content-end">
+        <div class="col-4 "></div>
+                <a type="button" href="{% url 'editar' atrid=obj.pk %}" class="btn btn-primary sol_action">Editar</a>
+                {% if user_type == 1 or user_type == 3 %}<a type="button" href="{% url 'confirmar' pk=obj.pk %}" class="btn btn-success sol_action">Confirmar</a>{% endif %}
+                <a type="button" href="{% url 'excluir' pk=obj.pk %}" class="btn btn-danger sol_action">Excluir</a>
+        <div class="col-4 ">
+                
+              
+        </div>
+      </div>
+</div>
 
-{% if messages %}
-    {% for m in messages %}
-        <p>-> {{ m }}</p>
-    {% endfor %}
-{% endif %}
-{% if not request.user.is_authenticated %}
-    VISITANTE
-
-    <p><a href="{% url 'login' %}">Fazer login</a></p>
-{% else %}
-    Bem vindo: {{ request.user.name }} - {{ request.user.get_type }}
-    <p><a href="{% url 'logout' %}">Sair</a></p>
-    
-    
-{% endif %}
-
-{% if request.user.user_type == 3 %}
-<p><a href="{% url 'insercao' %}">Solicitações</a></p>
-{% endif %}
-<p><a href="{% url 'insercao' %}">Criar Solicitação</a></p>
-
-
-asdasd
-
-
-
-
-
+ 
 {% endblock %}
