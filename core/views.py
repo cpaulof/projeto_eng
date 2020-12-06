@@ -19,27 +19,48 @@ def index(request):
     else:
         return redirect('login')
 
-    
-
-def login_view(request):
+def submit_login(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            user = authenticate(username=data['email'], password=data['password'])
-            if user is not None:
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        print(email)
+        print(password)
+
+        user = authenticate(username=email, password=password)
+
+        if user is not None:
                 login(request, user)
                 messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
                 return HttpResponseRedirect(reverse_lazy('visualizar'))
-            else:
-                messages.add_message(request, messages.ERROR, 'Dados incorretos')
-                return HttpResponseRedirect(reverse_lazy('login'))
-    else:
-        if request.user.is_authenticated:
-            messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
-            return HttpResponseRedirect(reverse_lazy('visualizar'))
-        form = LoginForm()
+        else:
+            if request.user.is_authenticated:
+                messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
+                return HttpResponseRedirect(reverse_lazy('visualizar'))
+            form = LoginForm()
         return render(request, "core/login.html", {'form': form})
+
+
+def login_view(request):
+    return render(request, 'core/login.html')
+#    if request.method == 'POST':
+#        form = LoginForm(request.POST)
+#
+#        if form.is_valid():
+#            data = form.cleaned_data
+#            user = authenticate(username=data['email'], password=data['password'])
+#            if user is not None:
+#                login(request, user)
+#                messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
+#                return HttpResponseRedirect(reverse_lazy('visualizar'))
+#            else:
+#                messages.add_message(request, messages.ERROR, 'Dados incorretos')
+#                return HttpResponseRedirect(reverse_lazy('login'))
+#    else:
+#        if request.user.is_authenticated:
+#            messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
+#            return HttpResponseRedirect(reverse_lazy('visualizar'))
+#        form = LoginForm()
+#        return render(request, "core/login.html", {'form': form})
 
 def insercao(request):
     if not request.user.is_authenticated:
