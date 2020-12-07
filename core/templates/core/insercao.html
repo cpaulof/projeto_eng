@@ -1,9 +1,37 @@
 {% extends base_template %}
-{% block title %}Programação{% endblock %}
+
+{% block title %}Criar{% endblock %}
+
 {% block content %}
-<div class="list-title">
-    <h2>Programação</h2>
+
+<div class="edit_form mt-5">
+    <form method="post" role="form">
+        {% csrf_token %}
+        
+    
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label for="inputText1"  class="input-group-text" >Navio</label >
+                    </div>
+                    <input type="text" name="navio"  id="inputText1" value="{{obj.navio}}" class="form-control" >
+                  </div>
+                </div>
+    
+      <div class="form-group">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01">Berço</label>
+            </div>
+            <select name="berco" class="custom-select" id="inputGroupSelect01">
+                <option value="" selected hidden>Selecione</option>
+            {% for b in bercos %}
+              <option value="{{b.pk}}">{{b}}</option>
+            {% endfor %}
+            </select>
+          </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
 </div>
-
-
 {% endblock %}

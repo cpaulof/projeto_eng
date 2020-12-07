@@ -1,12 +1,15 @@
 {% extends base_template %}
 {% block title %}Programação{% endblock %}
 {% block content %}
-<div class="list-title">
+<div class="list-title mt-5">
     <h2>Programação</h2>
 </div>
+{% if not request.user.is_authenticated %}
+<div><a class="btn btn-info" href="{% url 'login' %}">Fazer Login</a></div>
+{% endif %}
 {% for b in solicitacoes %}
 
-    <table class="table table-light table-bordered" >
+    <table class="table  table-bordered bg-light" >
         <caption>Berco {{forloop.counter}}</caption>
         <tr>
             <td>Num</td>
@@ -18,12 +21,7 @@
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{s.navio}}</td>
-            <td>
-            {% if s.usuario == request.user %}
-                <a data-toggle="tooltip"  title="Editar" href="{% url 'editar' atrid=s.pk %}">{{s.data}}</a>
-                {% else %} {{s.data}}
-            {% endif %}
-            </td>
+            <td>{{s.data}}</td>
             <td>{{s.usuario}}</td>
             
         </tr>

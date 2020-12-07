@@ -1,46 +1,56 @@
-{% extends "base.html" %}
+{% extends base_template %}
 
-{% block title %}Programação{% endblock %}
-{% block extra_head %}
-    {{ form.media }}
-{% endblock %}
+{% block title %}Editar{% endblock %}
+
 {% block content %}
-{% if messages %}
-    {% for m in messages %}
-        <p>-> {{ m }}</p>
-    {% endfor %}
-{% endif %}
-{% if not request.user.is_authenticated %}
-    VISITANTE
-
-    <p><a href="{% url 'login' %}">Fazer login</a></p>
-{% else %}
-    Bem vindo: {{ request.user.name }}
-    <p><a href="{% url 'logout' %}">Logout</a></p>
-{% endif %}
-
+<div class="sol_title mt-5"><h2>Editar Solicitação</h2></div>
+<div class="edit_form mt-5">
 <form method="post" role="form">
-    {% for field in form.visible_fields %}
-    <div class="form-group">
-        {{ field.label_tag }}
-        {{ field }}
-        <div class="text-muted pull-right">
-            <small>{{ field.help_text }}</small>
-        </div>
-        <div class="help-block">
-            {{ field.errors }}
-        </div>
-    </div>
-    {% endfor %}
-    {% for hidden in form.hidden_fields %}
-        {{ hidden }}
-    {% endfor %}
     {% csrf_token %}
-    <div class="form-group" >
-        <input type="submit" value="Salvar" class="btn btn-primary" />
-        <a  class="btn btn-danger" >Excluir</a>
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-prepend">
+            <label  class="input-group-text">Solicitante</label >
+            </div>
+            <input type="text" value="{{obj.usuario.name}}" class="form-control" readonly>
+        </div>
     </div>
-    
-</form>
 
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-prepend">
+              <label   class="input-group-text" >Data</label >
+            </div>
+            <input type="text" value="{{obj.data}}" class="form-control" readonly>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                  <label for="inputText1"  class="input-group-text" >Navio</label >
+                </div>
+                <input type="text" name="navio"  id="inputText1" value="{{obj.navio}}" class="form-control" >
+              </div>
+            </div>
+
+  <div class="form-group">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Berço</label>
+        </div>
+        <select name="berco" class="custom-select" id="inputGroupSelect01">
+        {% for b in bercos %}
+          {% if b == obj.berco %}
+          <option value="{{b.pk}}" selected>{{b}}</option>
+          {% else %}
+          <option value="{{b.pk}}">{{b}}</option>
+          {% endif %}
+        {% endfor %}
+        </select>
+      </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+</div>
 {% endblock %}
