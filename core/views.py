@@ -162,10 +162,13 @@ def confirmar_solicitacao(request, pk):
     return HttpResponseRedirect(reverse_lazy('solicitacoes'))
 
 def excluir_solicitacao(request, pk):
-    '''Exclui uma solicitação (analista, admin)'''
-    if not request.user.is_authenticated or request.user.user_type not in (1, 3):
+    '''Exclui uma solicitação (analista, admin, atracador)'''
+    if not request.user.is_authenticated:
         return HttpResponseForbidden()
-    obj = get_object_or_404(Solicitacao, pk=pk)
+    if request.user.user_type not in (1, 3):
+        obj = get_object_or_404(Solicitacao, pk=pk, usuario=request.user)
+    else:
+        obj = get_object_or_404(Solicitacao, pk=pk)
     obj.delete()
     messages.info(request, 'Solicitação excluída!')
     return HttpResponseRedirect(reverse_lazy('solicitacoes'))
