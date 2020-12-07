@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
-
+    '''Gerenciador do Model User customizado. Com objetivo de criar e autenticar usuário com base no email'''
     def _create_user(self, email, user_type, password, is_staff, is_superuser, **extra_fields):
         if not email:
             raise ValueError('Usuário deve possuir um email')
@@ -25,15 +25,18 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, email=None, user_type=None, password=None, **extra_fields):
+        '''criação de usuário'''
         return self._create_user(email, user_type, password, False, False, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
+        '''criação de superusuario'''
         user = self._create_user(email, 1, password, True, True, **extra_fields)
         user.save(using=self._db)
         return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    '''Customização da classe User padrão do Django. Utilizar email como username'''
     TIPOS = {
          1: 'Admin',
          2: 'Atracador',
@@ -57,20 +60,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return "/users/%i/" % (self.pk)
+
     def get_email(self):
         return self.email
     
     def get_type(self):
+        '''retorna o nome do tipo de usuario'''
         return self.TIPOS[self.user_type]
-
 
 class Navio(models.Model):
     nome = models.CharField(unique=True, max_length=150)
-    #proprietario = 
     def __str__(self):
         return self.nome
-
-        
+   
 class Berco(models.Model):
     nome = models.CharField(unique=True, max_length=50)
     ocupado = models.BooleanField(default=False)
@@ -89,6 +91,7 @@ class Solicitacao(models.Model):
         return str(self.data)
 
 class RegistroSaida(models.Model):
+    '''Modelo para registrar informação quando o analista retira a solicitação da fila'''
     solicitacao = models.OneToOneField(Solicitacao, on_delete=models.CASCADE)
     data = models.DateTimeField(auto_now_add=True)
 

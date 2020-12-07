@@ -1,11 +1,7 @@
-import datetime
-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
-from django.template import loader
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic.edit import FormView
 from django.contrib import messages
 from .models import Solicitacao, Navio, Berco, RegistroSaida
 
@@ -18,6 +14,7 @@ def index(request):
         return redirect('login')
 
 def submit_login(request):
+    '''processa credenciais para login'''
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -36,30 +33,14 @@ def submit_login(request):
 
 
 def login_view(request):
+    '''Página de login (Todo mundo)'''
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse_lazy('visualizar'))
     return render(request, 'core/login.html')
-#    if request.method == 'POST':
-#        form = LoginForm(request.POST)
-#
-#        if form.is_valid():
-#            data = form.cleaned_data
-#            user = authenticate(username=data['email'], password=data['password'])
-#            if user is not None:
-#                login(request, user)
-#                messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
-#                return HttpResponseRedirect(reverse_lazy('visualizar'))
-#            else:
-#                messages.add_message(request, messages.ERROR, 'Dados incorretos')
-#                return HttpResponseRedirect(reverse_lazy('login'))
-#    else:
-#        if request.user.is_authenticated:
-#            messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
-#            return HttpResponseRedirect(reverse_lazy('visualizar'))
-#        form = LoginForm()
-#        return render(request, "core/login.html", {'form': form})
+
 
 def insercao(request):
+    '''Cria uma nova solicitação (analista, admin, atracador)'''
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
 
@@ -86,6 +67,7 @@ def insercao(request):
     return render(request, "core/insercao.html", context)
 
 def editar(request, atrid):
+    '''Edita uma solicitação em aberto (analista, admin, atracador)'''
     context = {}
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
@@ -117,7 +99,8 @@ def editar(request, atrid):
     return render(request, "core/editar.html", context)
 
 
-def visualizar(request):    
+def visualizar(request):
+    '''Lista a programação das solicitações confirmadas (Todo mundo)''' 
     context = {}
     context['base_template'] =  _get_base_template(request)
     bercos = Berco.objects.all()
@@ -128,7 +111,7 @@ def visualizar(request):
 
 
 def logout_view(request):
-    
+    '''Desloga o usuário e redireciona (analista, admin, atracador)'''
     if request.user.is_authenticated:
         logout(request)
         messages.success(request, 'Deslogado')
@@ -136,6 +119,8 @@ def logout_view(request):
 
     
 def solicitacoes(request):
+    '''Exibe detalhes de solicitações em aberto, no caso de atracador, 
+    somente das solicitações feita por ele (analista, admin, atracador)'''
     context = {}
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
@@ -149,6 +134,7 @@ def solicitacoes(request):
 
     
 def solicitacao(request, pk=None):
+    '''Detalhe de uma solicitação (analista, admin, atracador)'''
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
     context = {}
@@ -166,6 +152,7 @@ def solicitacao(request, pk=None):
 
 
 def confirmar_solicitacao(request, pk):
+    '''Confirma uma solicitação (analista, admin)'''
     if not request.user.is_authenticated and request.user.user_type not in (1, 3):
         return HttpResponseForbidden()
     obj = get_object_or_404(Solicitacao, pk=pk)
@@ -174,6 +161,7 @@ def confirmar_solicitacao(request, pk):
     return HttpResponseRedirect(reverse_lazy('solicitacoes'))
 
 def excluir_solicitacao(request, pk):
+    '''Exclui uma solicitação (analista, admin)'''
     if not request.user.is_authenticated and request.user.user_type not in (1, 3):
         return HttpResponseForbidden()
     obj = get_object_or_404(Solicitacao, pk=pk)
@@ -199,6 +187,7 @@ def _get_navio_or_create(request, navio):
 
 
 def registrar_saida(request, pk):
+    '''Confirma a saída da solicitação da fila e registra no bd'''
     if not request.user.is_authenticated and request.user.user_type not in (1, 3):
         return HttpResponseForbidden()
     obj = get_object_or_404(Solicitacao, pk=pk)
