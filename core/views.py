@@ -153,19 +153,21 @@ def solicitacao(request, pk=None):
 
 def confirmar_solicitacao(request, pk):
     '''Confirma uma solicitação (analista, admin)'''
-    if not request.user.is_authenticated and request.user.user_type not in (1, 3):
+    if not request.user.is_authenticated or request.user.user_type not in (1, 3):
         return HttpResponseForbidden()
     obj = get_object_or_404(Solicitacao, pk=pk)
     obj.status = 1
     obj.save()
+    messages.info(request, 'Solicitação confirmada!')
     return HttpResponseRedirect(reverse_lazy('solicitacoes'))
 
 def excluir_solicitacao(request, pk):
     '''Exclui uma solicitação (analista, admin)'''
-    if not request.user.is_authenticated and request.user.user_type not in (1, 3):
+    if not request.user.is_authenticated or request.user.user_type not in (1, 3):
         return HttpResponseForbidden()
     obj = get_object_or_404(Solicitacao, pk=pk)
     obj.delete()
+    messages.info(request, 'Solicitação excluída!')
     return HttpResponseRedirect(reverse_lazy('solicitacoes'))
 
 def _get_base_template(request):
@@ -188,11 +190,12 @@ def _get_navio_or_create(request, navio):
 
 def registrar_saida(request, pk):
     '''Confirma a saída da solicitação da fila e registra no bd'''
-    if not request.user.is_authenticated and request.user.user_type not in (1, 3):
+    if not request.user.is_authenticated or request.user.user_type not in (1, 3):
         return HttpResponseForbidden()
     obj = get_object_or_404(Solicitacao, pk=pk)
     obj.status = 3
     obj.save()
     registro = RegistroSaida.objects.create(solicitacao=obj)
     registro.save()
+    messages.info(request, 'Registrado! Solicitação removida da fila.')
     return HttpResponseRedirect(reverse_lazy('visualizar'))

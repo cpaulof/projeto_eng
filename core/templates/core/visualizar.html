@@ -5,7 +5,7 @@
     <h2>Programação</h2>
 </div>
 {% if not request.user.is_authenticated %}
-<div><a class="btn btn-info" href="{% url 'login' %}">Fazer Login</a></div>
+<div><a class="btn btn-info m-2" href="{% url 'login' %}">Fazer Login</a></div>
 {% endif %}
 {% for b in solicitacoes %}
 
@@ -21,7 +21,9 @@
         <tr >
             <td style="width:70px;">
                 <div style="float:left">{{forloop.counter}}</div> 
+                {% if request.user.user_type == 1 or request.user.user_type == 3 %}
                 <div data-toggle="tooltip" title="Registrar" style="float:right; font-size: large;"><a  href="{% url 'registrar' s.pk %}">&check;</a></div>
+                {% endif %}
             </td>
             <td>{{s.navio}}</td>
             <td>{{s.data}}</td>
