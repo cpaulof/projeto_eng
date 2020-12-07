@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import User, Navio, Solicitacao, Berco, Atracacao, RegistroSaida
+from .models import User, Navio, Solicitacao, Berco, RegistroSaida
 
 
 class UserAdmin(BaseUserAdmin):
@@ -46,9 +46,3 @@ class BercoAdmin(admin.ModelAdmin):
 @admin.register(RegistroSaida)
 class RegistroSaidaAdmin(admin.ModelAdmin):
     pass
-
-
-@admin.register(Atracacao)
-class AtracacaoAdmin(admin.ModelAdmin):
-    fields = ('solicitacao', 'berco', ('data_entrada', 'data_saida'))
-

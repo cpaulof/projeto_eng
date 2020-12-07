@@ -7,9 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic.edit import FormView
 from django.contrib import messages
-
-from .forms import LoginForm, AtracacaoForm
-from .models import Atracacao, Solicitacao, Navio,  Berco
+from .models import Solicitacao, Navio, Berco, RegistroSaida
 
 # Create your views here.
 
@@ -29,9 +27,9 @@ def submit_login(request):
         user = authenticate(username=email, password=password)
 
         if user is not None:
-                login(request, user)
-                messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
-                return HttpResponseRedirect(reverse_lazy('visualizar'))
+            login(request, user)
+            messages.add_message(request, messages.SUCCESS, 'Usuário autenticado')
+            return HttpResponseRedirect(reverse_lazy('visualizar'))
         else:
             messages.error(request, 'Dados incorretos!')
         return render(request, "core/login.html", {})
@@ -130,6 +128,7 @@ def visualizar(request):
 
 
 def logout_view(request):
+    
     if request.user.is_authenticated:
         logout(request)
         messages.success(request, 'Deslogado')
@@ -172,10 +171,14 @@ def confirmar_solicitacao(request, pk):
     obj = get_object_or_404(Solicitacao, pk=pk)
     obj.status = 1
     obj.save()
-    return HttpResponse("CONFIRMAR" + str(pk))
+    return HttpResponseRedirect(reverse_lazy('solicitacoes'))
 
 def excluir_solicitacao(request, pk):
-    return HttpResponse("EXCLUIR")
+    if not request.user.is_authenticated and request.user.user_type not in (1, 3):
+        return HttpResponseForbidden()
+    obj = get_object_or_404(Solicitacao, pk=pk)
+    obj.delete()
+    return HttpResponseRedirect(reverse_lazy('solicitacoes'))
 
 def _get_base_template(request):
     if request.user.is_authenticated:
@@ -191,6 +194,16 @@ def _get_navio_or_create(request, navio):
         navio = Navio.objects.get(nome=nome_navio)
     except Navio.DoesNotExist:    
         navio = Navio.objects.create(nome=nome_navio)
-        navio.save() 
+        navio.save()
     return navio
 
+
+def registrar_saida(request, pk):
+    if not request.user.is_authenticated and request.user.user_type not in (1, 3):
+        return HttpResponseForbidden()
+    obj = get_object_or_404(Solicitacao, pk=pk)
+    obj.status = 3
+    obj.save()
+    registro = RegistroSaida.objects.create(solicitacao=obj)
+    registro.save()
+    return HttpResponseRedirect(reverse_lazy('visualizar'))

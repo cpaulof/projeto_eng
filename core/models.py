@@ -88,19 +88,7 @@ class Solicitacao(models.Model):
     def __str__(self):
         return str(self.data)
 
-
-
-class Atracacao(models.Model):
-    solicitacao = models.OneToOneField(Solicitacao, on_delete=models.CASCADE)
-    data_entrada = models.DateTimeField()
-    berco = models.ForeignKey(Berco, on_delete=models.CASCADE)
-    data_saida = models.DateTimeField()
-    status = models.IntegerField(default=0)
-
 class RegistroSaida(models.Model):
-    atracacao = models.OneToOneField(Atracacao, on_delete=models.CASCADE)
+    solicitacao = models.OneToOneField(Solicitacao, on_delete=models.CASCADE)
     data = models.DateTimeField(auto_now_add=True)
-
-
-
 

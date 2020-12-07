@@ -18,18 +18,19 @@
             <td>Solicitante</td>
         </tr>
     {% for s in b %}
-        <tr>
-            <td>{{forloop.counter}}</td>
+        <tr >
+            <td style="width:70px;">
+                <div style="float:left">{{forloop.counter}}</div> 
+                <div data-toggle="tooltip" title="Registrar" style="float:right; font-size: large;"><a  href="{% url 'registrar' s.pk %}">&check;</a></div>
+            </td>
             <td>{{s.navio}}</td>
             <td>{{s.data}}</td>
             <td>{{s.usuario}}</td>
-            
         </tr>
-        
-
     {% endfor %}
 </table>
 {% endfor %}
+
 <script>
     $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();

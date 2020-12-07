@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path
 from core import views
 
@@ -14,4 +13,5 @@ urlpatterns = [
     path('solicitacao/<int:pk>', views.solicitacao, name='solicitacao'),
     path('confirmar/<int:pk>', views.confirmar_solicitacao, name='confirmar'),
     path('excluir/<int:pk>', views.excluir_solicitacao, name='excluir'),
+    path('registrar/<int:pk>', views.registrar_saida, name='registrar'),
 ]
